@@ -14,9 +14,18 @@ import SearchResources from './src/screens/resources-search';
 import AddResource from './src/screens/resource-add';
 import EditResource from './src/screens/resource-edit';
 import MyResources from './src/screens/resources-my';
+import SearchHospitals from './src/screens/resources-search';
+import AddHospital from './src/screens/hospital-add';
+import EditHospital from './src/screens/hospital-edit';
+import MyHospitals from './src/screens/hospital-my';
 import Map from './src/screens/map';
 
-import {HomeIcon, DonateIcon, SearchIcon} from './src/images/svg-icons';
+import {
+  HomeIcon,
+  DonateIcon,
+  SearchIcon,
+  HospitalIcon,
+} from './src/images/svg-icons';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -34,6 +43,17 @@ const DonationsStackOptions = ({navigation}) => {
     headerRight: () => (
       <Button
         onPress={() => navigation.navigate('Add Donation')}
+        title="Add "
+      />
+    ),
+  };
+};
+
+const HospitalsStackOptions = ({navigation}) => {
+  return {
+    headerRight: () => (
+      <Button
+        onPress={() => navigation.navigate('Add Hospital')}
         title="Add "
       />
     ),
@@ -73,7 +93,7 @@ const TabLayout = () => (
       name="Manage Hospitals"
       component={HospitalStackLayout}
       options={{
-        tabBarIcon: ({color}) => <DonateIcon fill={color} />,
+        tabBarIcon: ({color}) => <HospitalIcon fill={color} />,
       }}
     />
     <Tab.Screen
@@ -102,11 +122,11 @@ const HospitalStackLayout = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Hospitals"
-      component={MyResources}
-      options={DonationsStackOptions}
+      component={MyHospitals}
+      options={HospitalsStackOptions}
     />
-    <Stack.Screen name="Add Donation" component={AddResource} />
-    <Stack.Screen name="Edit Donation" component={EditResource} />
+    <Stack.Screen name="Add Hospital" component={AddHospital} />
+    <Stack.Screen name="Edit Hospital" component={EditHospital} />
   </Stack.Navigator>
 );
 

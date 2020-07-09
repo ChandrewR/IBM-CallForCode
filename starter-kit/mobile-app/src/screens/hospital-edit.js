@@ -12,7 +12,7 @@ import PickerSelect from 'react-native-picker-select';
 import {CheckedIcon, UncheckedIcon} from '../images/svg-icons';
 import Geolocation from '@react-native-community/geolocation';
 
-import {add, hospitalID} from '../lib/hospital-utils';
+import {update, remove, hospitalID} from '../lib/hospital-utils';
 
 const styles = StyleSheet.create({
   outerView: {
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 25,
   },
-  availabilityArea: {
+  quantityArea: {
     width: '40%',
   },
   textInput: {
@@ -70,8 +70,18 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginBottom: 25,
   },
-  button: {
+  updateButton: {
     backgroundColor: '#1062FE',
+    color: '#FFFFFF',
+    fontFamily: 'IBMPlexSans-Medium',
+    fontSize: 16,
+    overflow: 'hidden',
+    padding: 12,
+    textAlign: 'center',
+    marginTop: 15,
+  },
+  deleteButton: {
+    backgroundColor: '#da1e28',
     color: '#FFFFFF',
     fontFamily: 'IBMPlexSans-Medium',
     fontSize: 16,
@@ -82,10 +92,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const AddResource = function({navigation}) {
+const EditResource = props => {
   const clearItem = {
     hospitalID: hospitalID(),
-    type: 'Hospital',
+    e: 'Hospital',
     name: '',
     description: '',
     district: '',
@@ -95,19 +105,25 @@ const AddResource = function({navigation}) {
     availability: '0',
   };
   const [item, setItem] = React.useState(clearItem);
-  const [useLocation, setUseLocation] = React.useState(true);
+  const [useLocation, setUseLocation] = React.useState(false);
   const [position, setPosition] = React.useState({});
 
   React.useEffect(() => {
-    navigation.addListener('focus', () => {
+    props.navigation.addListener('focus', () => {
+      const item = props.route.params.item;
+      setItem({
+        ...item,
+        availability: item.availability.toString(),
+        name: item.name.toString(),
+        description: item.description.toString(),
+        district: item.district.toString(),
+        state: item.state.toString(),
+        country: item.country.toString(),
+        contact: item.contact.toString(),
+      });
+
       Geolocation.getCurrentPosition(pos => {
         setPosition(pos);
-        if (useLocation) {
-          setItem({
-            ...item,
-            location: `${pos.coords.latitude},${pos.coords.longitude}`,
-          });
-        }
       });
     });
   }, []);
@@ -122,24 +138,53 @@ const AddResource = function({navigation}) {
     setUseLocation(!useLocation);
   };
 
-  const sendItem = () => {
+  const updateItem = () => {
     const payload = {
       ...item,
-      availability: isNaN(item.availability) ? 1 : parseInt(item.availability),
+      quantity: isNaN(item.quantity) ? 1 : parseInt(item.quantity),
+      id: item.id || item['_id'],
+      availability: item.availability.toString(),
+      name: item.name.toString(),
+      description: item.description.toString(),
+      district: item.district.toString(),
+      state: item.state.toString(),
+      country: item.country.toString(),
+      contact: item.contact.toString(),
     };
 
-    add(payload)
+    update(payload)
       .then(() => {
-        Alert.alert('Thank you!', 'Hospital has been added.', [{text: 'OK'}]);
-        setItem({...clearItem, location: payload.location});
+        Alert.alert('Done', 'Your item has been updated.', [{text: 'OK'}]);
+        props.navigation.goBack();
       })
       .catch(err => {
         console.log(err);
-        Alert.alert(
-          'ERROR',
-          'Please try again. If the problem persists contact an administrator.',
-          [{text: 'OK'}],
-        );
+        Alert.alert('ERROR', err.message, [{text: 'OK'}]);
+      });
+  };
+
+  const confirmDelete = () => {
+    Alert.alert('Delete', 'Are you sure you want to delete this item?', [
+      {text: 'Cancel'},
+      {text: 'Delete', onPress: () => deleteItem()},
+    ]);
+  };
+
+  const deleteItem = () => {
+    console.log('<<<<<<<<< - deleteItem -' + item.id);
+    const payload = {
+      ...item,
+      id: item.id || item['_id'],
+    };
+
+    remove(payload)
+      .then(() => {
+        Alert.alert('Done', 'Your item has been deleted.', [{text: 'OK'}]);
+        props.navigation.goBack();
+      })
+      .catch(err => {
+        console.log(err);
+        Alert.alert('ERROR', err.message, [{text: 'OK'}]);
       });
   };
 
@@ -153,22 +198,19 @@ const AddResource = function({navigation}) {
             value={item.type}
             onValueChange={t => setItem({...item, type: t})}
             items={[
-              {
-                label: 'Hospital',
-                value: 'Hospital',
-              } /* ,
-              {label: 'Help', value: 'Help'},
-              {label: 'Other', value: 'Other'}, */,
+              {label: 'Hospital', value: 'Hospital'},
+              /* {label: 'Help', value: 'Help'},
+              {label: 'Other', value: 'Other'}, */
             ]}
           />
         </View>
-        <View style={styles.availabilityArea}>
+        <View style={styles.quantityArea}>
           <Text style={styles.label}>Availability</Text>
           <TextInput
             style={styles.textInput}
             value={item.availability}
             onChangeText={t => setItem({...item, availability: t})}
-            onSubmitEditing={sendItem}
+            onSubmitEditing={updateItem}
             returnKeyType="send"
             enablesReturnKeyAutomatically={true}
             placeholder="e.g., 10"
@@ -177,15 +219,15 @@ const AddResource = function({navigation}) {
         </View>
       </View>
 
-      <Text style={styles.label}>Hospital Name</Text>
+      <Text style={styles.label}>Name</Text>
       <TextInput
         style={styles.textInput}
         value={item.name}
         onChangeText={t => setItem({...item, name: t})}
-        onSubmitEditing={sendItem}
+        onSubmitEditing={updateItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
-        placeholder="e.g., Govt Hospital"
+        placeholder="e.g., Tomotatoes"
         blurOnSubmit={false}
       />
       <Text style={styles.label}>Description</Text>
@@ -193,17 +235,18 @@ const AddResource = function({navigation}) {
         style={styles.textInput}
         value={item.description}
         onChangeText={t => setItem({...item, description: t})}
-        onSubmitEditing={sendItem}
+        onSubmitEditing={updateItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
-        placeholder="e.g., treats corono virus"
+        placeholder="e.g., small baskets of cherry tomatoes"
       />
+
       <Text style={styles.label}>Contact</Text>
       <TextInput
         style={styles.textInput}
         value={item.contact}
         onChangeText={t => setItem({...item, contact: t})}
-        onSubmitEditing={sendItem}
+        onSubmitEditing={updateItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
         placeholder="user@domain.com"
@@ -213,20 +256,20 @@ const AddResource = function({navigation}) {
         style={styles.textInput}
         value={item.district}
         onChangeText={t => setItem({...item, district: t})}
-        onSubmitEditing={sendItem}
+        onSubmitEditing={updateItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
-        placeholder="District name"
+        placeholder="District"
       />
       <Text style={styles.label}>State</Text>
       <TextInput
         style={styles.textInput}
         value={item.state}
         onChangeText={t => setItem({...item, state: t})}
-        onSubmitEditing={sendItem}
+        onSubmitEditing={updateItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
-        placeholder="State name"
+        placeholder="District"
       />
 
       <Text style={styles.label}>Country</Text>
@@ -234,10 +277,10 @@ const AddResource = function({navigation}) {
         style={styles.textInput}
         value={item.country}
         onChangeText={t => setItem({...item, country: t})}
-        onSubmitEditing={sendItem}
+        onSubmitEditing={updateItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
-        placeholder="Country name"
+        placeholder="District"
       />
 
       <Text style={styles.label}>Location</Text>
@@ -253,27 +296,31 @@ const AddResource = function({navigation}) {
       </View>
       <TextInput
         style={useLocation ? styles.textInputDisabled : styles.textInput}
-        value={item.district + ',' + item.state + ',' + item.country}
+        value={item.location}
         onChangeText={t => setItem({...item, location: t})}
-        onSubmitEditing={sendItem}
+        onSubmitEditing={updateItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
         placeholder="street address, city, state"
-        editable={!useLocation}
       />
 
       {item.type !== '' &&
         item.name.trim() !== '' &&
-        item.district.trim() !== '' &&
+        item.description.trim() !== '' &&
         item.state.trim() !== '' &&
+        item.district.trim() !== '' &&
         item.country.trim() !== '' &&
         item.contact.trim() !== '' && (
-          <TouchableOpacity onPress={sendItem}>
-            <Text style={styles.button}>Add</Text>
+          <TouchableOpacity onPress={updateItem}>
+            <Text style={styles.updateButton}>Update</Text>
           </TouchableOpacity>
         )}
+
+      <TouchableOpacity onPress={confirmDelete}>
+        <Text style={styles.deleteButton}>Delete</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
 
-export default AddResource;
+export default EditResource;
