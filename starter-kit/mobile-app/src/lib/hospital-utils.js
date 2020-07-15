@@ -17,7 +17,7 @@ export const hospitalID = () => {
 export const search = query => {
   const type = query.type ? `type=${query.type}` : '';
   const name = query.name ? `name=${query.name}` : '';
-  const userID = query.hospitalID ? `userID=${query.hospitalID}` : '';
+  const hospitalID = query.hospitalID ? `userID=${query.hospitalID}` : '';
 
   return fetch(`${serverUrl}/api/hospital?${name}&${type}&${hospitalID}`, {
     method: 'GET',

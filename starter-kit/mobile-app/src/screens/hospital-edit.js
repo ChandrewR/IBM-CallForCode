@@ -296,7 +296,7 @@ const EditResource = props => {
       </View>
       <TextInput
         style={useLocation ? styles.textInputDisabled : styles.textInput}
-        value={item.location}
+        value={item.district + ',' + item.state + ',' + item.country}
         onChangeText={t => setItem({...item, location: t})}
         onSubmitEditing={updateItem}
         returnKeyType="send"

@@ -105,6 +105,7 @@ app.get("/api/session", (req, res) => {
  */
 function post_process_assistant(result) {
   let resource;
+  let type;
   // First we look to see if a) Watson did identify an intent (as opposed to not
   // understanding it at all), and if it did, then b) see if it matched a supplies entity
   // with reasonable confidence. "supplies" is the term our trained Watson skill uses
@@ -118,8 +119,15 @@ function post_process_assistant(result) {
   // to to a datbase lookup.
   if (result.intents.length > 0) {
     result.entities.forEach(item => {
+      console.log("Item entity check------>>>>>>>>" + item.entity);
       if (item.entity == "supplies" && item.confidence > 0.3) {
+        type = "supplies";
         resource = item.value;
+      }
+
+      if (item.entity == "hospital" && item.confidence > 0.3) {
+        type = "hospital";
+        resource = "hospital";
       }
     });
   }
@@ -127,18 +135,36 @@ function post_process_assistant(result) {
     return Promise.resolve(result);
   } else {
     // OK, we have a resource...let's look this up in the DB and see if anyone has any.
-    return cloudant.find("", resource, "").then(data => {
-      let processed_result = result;
-      if (data.statusCode == 200 && data.data != "[]") {
-        processed_result["resources"] = JSON.parse(data.data);
-        processed_result["generic"][0]["text"] =
-          "There is" + "\xa0" + resource + " available";
-      } else {
-        processed_result["generic"][0]["text"] =
-          "Sorry, no" + "\xa0" + resource + " available";
-      }
-      return processed_result;
-    });
+
+    if (type === "supplies") {
+      return cloudant.find("", resource, "").then(data => {
+        let processed_result = result;
+        if (data.statusCode == 200 && data.data != "[]") {
+          processed_result["resources"] = JSON.parse(data.data);
+          processed_result["generic"][0]["text"] =
+            "There is" + "\xa0" + resource + " available";
+        } else {
+          processed_result["generic"][0]["text"] =
+            "Sorry, no" + "\xa0" + resource + " available";
+        }
+        return processed_result;
+      });
+    }
+
+    if (type === "hospital") {
+      return hospitalCloudant.find("", resource, "").then(data => {
+        let processed_result = result;
+        if (data.statusCode == 200 && data.data != "[]") {
+          processed_result["resources"] = JSON.parse(data.data);
+          processed_result["generic"][0]["text"] =
+            "There is" + "\xa0" + resource + " available";
+        } else {
+          processed_result["generic"][0]["text"] =
+            "Sorry, no" + "\xa0" + resource + " available";
+        }
+        return processed_result;
+      });
+    }
   }
 }
 
@@ -402,7 +428,7 @@ app.post("/api/hospital", (req, res) => {
  * The new rev of the resource will be returned if successful
  */
 
-app.patch("/api/resource/:id", (req, res) => {
+app.patch("/api/hospital/:id", (req, res) => {
   const type = req.body.type || "";
   const name = req.body.name || "";
   const description = req.body.description || "";
@@ -437,7 +463,7 @@ app.patch("/api/resource/:id", (req, res) => {
 /**
  * Delete a resource
  */
-app.delete("/api/resource/:id", (req, res) => {
+app.delete("/api/hospital/:id", (req, res) => {
   hospitalCloudant
     .deleteById(req.params.id)
     .then(statusCode => res.sendStatus(statusCode))
