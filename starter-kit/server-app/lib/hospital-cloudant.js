@@ -39,9 +39,9 @@ const dbCloudantConnect = () => {
         if (err) {
           console.log(
             "Connect failure: " +
-              err.message +
-              " for Cloudant ID: " +
-              cloudant_id
+            err.message +
+            " for Cloudant ID: " +
+            cloudant_id
           );
           reject(err);
         } else {
@@ -54,9 +54,9 @@ const dbCloudantConnect = () => {
                   if (err) {
                     console.log(
                       "DB Create failure: " +
-                        err.message +
-                        " for Cloudant ID: " +
-                        cloudant_id
+                      err.message +
+                      " for Cloudant ID: " +
+                      cloudant_id
                     );
                     reject(err);
                   }
@@ -125,11 +125,11 @@ function find(type, hospitalName, hospitalID, district, state, country) {
     }
     if (state) {
       let search = `(?i).*${state}.*`;
-      selector["name"] = { $regex: search };
+      selector["state"] = { $regex: search };
     }
     if (country) {
       let search = `(?i).*${country}.*`;
-      selector["name"] = { $regex: search };
+      selector["country"] = { $regex: search };
     }
 
     db.find(

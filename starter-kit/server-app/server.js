@@ -103,7 +103,7 @@ app.get("/api/session", (req, res) => {
  *
  * We also modify the text response to match the above.
  */
-function post_process_assistant(result) {
+function post_process_assistant(result, message) {
   let resource;
   let type;
   // First we look to see if a) Watson did identify an intent (as opposed to not
@@ -118,16 +118,18 @@ function post_process_assistant(result) {
   // That's our trigger to do a lookup - using the entitty.value as the name of resource
   // to to a datbase lookup.
   if (result.intents.length > 0) {
-    result.entities.forEach(item => {
+    result.entities.some(item => {
       console.log("Item entity check------>>>>>>>>" + item.entity);
       if (item.entity == "supplies" && item.confidence > 0.3) {
         type = "supplies";
         resource = item.value;
+        return true;
       }
 
       if (item.entity == "hospital" && item.confidence > 0.3) {
         type = "hospital";
         resource = "hospital";
+        return true;
       }
     });
   }
@@ -137,6 +139,8 @@ function post_process_assistant(result) {
     // OK, we have a resource...let's look this up in the DB and see if anyone has any.
 
     if (type === "supplies") {
+      console.log("Message --->>>" + message);
+
       return cloudant.find("", resource, "").then(data => {
         let processed_result = result;
         if (data.statusCode == 200 && data.data != "[]") {
@@ -152,12 +156,55 @@ function post_process_assistant(result) {
     }
 
     if (type === "hospital") {
-      return hospitalCloudant.find("", resource, "").then(data => {
+      console.log("Message :" + message);
+      console.log("Near" + message.search(/near/));
+      let districtname = "";
+      if ((message.search(/near/) > 0) || (message.search(/around/) > 0)) {
+        let usermessage = message.split(" ");
+        console.log("Cityyyyy---->" + usermessage.indexOf('city'));
+        console.log("Distrct--->>" + usermessage[(usermessage.indexOf('city') - 1)]);
+        districtname = usermessage[(usermessage.indexOf('city') - 1)];
+
+        return hospitalCloudant.find("", "", "", districtname, "").then(data => {
+          let processed_result = result;
+          if (data.statusCode == 200 && data.data != "[]") {
+            processed_result["resources"] = JSON.parse(data.data);
+            processed_result["generic"][0]["text"] =
+              //"There is" + "\xa0" + resource + " available";
+              "Hospitals available";
+          } else {
+            processed_result["generic"][0]["text"] =
+              "Sorry, no" + "\xa0" + resource + " available";
+          }
+          return processed_result;
+        });
+
+
+      } else {
+        return hospitalCloudant.find("", "", "").then(data => {
+          let processed_result = result;
+          if (data.statusCode == 200 && data.data != "[]") {
+            processed_result["resources"] = JSON.parse(data.data);
+            processed_result["generic"][0]["text"] =
+              //"There is" + "\xa0" + resource + " available";
+              "Hospitals available";
+          } else {
+            processed_result["generic"][0]["text"] =
+              "Sorry, no" + "\xa0" + resource + " available";
+          }
+          return processed_result;
+        });
+      }
+
+
+
+      return hospitalCloudant.find("", "", "").then(data => {
         let processed_result = result;
         if (data.statusCode == 200 && data.data != "[]") {
           processed_result["resources"] = JSON.parse(data.data);
           processed_result["generic"][0]["text"] =
-            "There is" + "\xa0" + resource + " available";
+            //"There is" + "\xa0" + resource + " available";
+            "Hospitals available";
         } else {
           processed_result["generic"][0]["text"] =
             "Sorry, no" + "\xa0" + resource + " available";
@@ -183,7 +230,7 @@ app.post("/api/message", (req, res) => {
   assistant
     .message(text, sessionid)
     .then(result => {
-      return post_process_assistant(result);
+      return post_process_assistant(result, req.body.text);
     })
     .then(new_result => {
       res.json(new_result);

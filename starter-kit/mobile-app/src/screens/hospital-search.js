@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import PickerSelect from 'react-native-picker-select';
 
-import {search} from '../lib/hospital-utils';
+import { search } from '../lib/hospital-utils';
 
 const styles = StyleSheet.create({
   outerView: {
@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const SearchResources = function({route, navigation}) {
-  const [query, setQuery] = React.useState({type: 'Hospital', name: ''});
+const SearchResources = function ({ route, navigation }) {
+  const [query, setQuery] = React.useState({ type: 'Hospital', name: '' });
   const [items, setItems] = React.useState([]);
   const [info, setInfo] = React.useState('');
 
@@ -97,7 +97,7 @@ const SearchResources = function({route, navigation}) {
       <TouchableOpacity
         style={styles.itemTouchable}
         onPress={() => {
-          navigation.navigate('Map', {item: props});
+          navigation.navigate('Map', { item: props });
         }}>
         <View style={styles.itemView}>
           <Text style={styles.itemName}>{props.name}</Text>
@@ -123,7 +123,7 @@ const SearchResources = function({route, navigation}) {
         Alert.alert(
           'ERROR',
           'Please try again. If the problem persists contact an administrator.',
-          [{text: 'OK'}],
+          [{ text: 'OK' }],
         );
       });
   };
@@ -133,20 +133,20 @@ const SearchResources = function({route, navigation}) {
       <View style={styles.inputsView}>
         <Text style={styles.label}>Type</Text>
         <PickerSelect
-          style={{inputIOS: styles.selector}}
+          style={{ inputIOS: styles.selector }}
           value={query.type}
-          onValueChange={t => setQuery({...query, type: t})}
+          onValueChange={t => setQuery({ ...query, type: t })}
           items={[
-            {label: 'Food', value: 'Food'},
-            {label: 'Help', value: 'Help'},
-            {label: 'Other', value: 'Other'},
+            { label: 'Hospital', value: 'Hospital' },
+            { label: 'Help', value: 'Help' },
+            { label: 'Other', value: 'Other' },
           ]}
         />
         <Text style={styles.label}>Name</Text>
         <TextInput
           style={styles.textInput}
           value={query.name}
-          onChangeText={t => setQuery({...query, name: t})}
+          onChangeText={t => setQuery({ ...query, name: t })}
           onSubmitEditing={searchItem}
           returnKeyType="send"
           enablesReturnKeyAutomatically={true}
@@ -163,7 +163,7 @@ const SearchResources = function({route, navigation}) {
       <FlatList
         style={styles.flatListView}
         data={items}
-        renderItem={({item}) => <Item {...item} />}
+        renderItem={({ item }) => <Item {...item} />}
         keyExtractor={item => item.id || item['_id']}
       />
     </View>

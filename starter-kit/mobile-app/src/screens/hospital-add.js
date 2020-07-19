@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import PickerSelect from 'react-native-picker-select';
-import {CheckedIcon, UncheckedIcon} from '../images/svg-icons';
+import { CheckedIcon, UncheckedIcon } from '../images/svg-icons';
 import Geolocation from '@react-native-community/geolocation';
 
-import {add, hospitalID} from '../lib/hospital-utils';
+import { add, hospitalID } from '../lib/hospital-utils';
 
 const styles = StyleSheet.create({
   outerView: {
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AddResource = function({navigation}) {
+const AddResource = function ({ navigation }) {
   const clearItem = {
     hospitalID: hospitalID(),
     type: 'Hospital',
@@ -130,15 +130,15 @@ const AddResource = function({navigation}) {
 
     add(payload)
       .then(() => {
-        Alert.alert('Thank you!', 'Hospital has been added.', [{text: 'OK'}]);
-        setItem({...clearItem, location: payload.location});
+        Alert.alert('Thank you!', 'Hospital has been added.', [{ text: 'OK' }]);
+        setItem({ ...clearItem, location: payload.location });
       })
       .catch(err => {
         console.log(err);
         Alert.alert(
           'ERROR',
           'Please try again. If the problem persists contact an administrator.',
-          [{text: 'OK'}],
+          [{ text: 'OK' }],
         );
       });
   };
@@ -149,9 +149,9 @@ const AddResource = function({navigation}) {
         <View style={styles.typeArea}>
           <Text style={styles.label}>Type</Text>
           <PickerSelect
-            style={{inputIOS: styles.selector}}
+            style={{ inputIOS: styles.selector }}
             value={item.type}
-            onValueChange={t => setItem({...item, type: t})}
+            onValueChange={t => setItem({ ...item, type: t })}
             items={[
               {
                 label: 'Hospital',
@@ -167,7 +167,7 @@ const AddResource = function({navigation}) {
           <TextInput
             style={styles.textInput}
             value={item.availability}
-            onChangeText={t => setItem({...item, availability: t})}
+            onChangeText={t => setItem({ ...item, availability: t })}
             onSubmitEditing={sendItem}
             returnKeyType="send"
             enablesReturnKeyAutomatically={true}
@@ -181,7 +181,7 @@ const AddResource = function({navigation}) {
       <TextInput
         style={styles.textInput}
         value={item.name}
-        onChangeText={t => setItem({...item, name: t})}
+        onChangeText={t => setItem({ ...item, name: t })}
         onSubmitEditing={sendItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
@@ -192,7 +192,7 @@ const AddResource = function({navigation}) {
       <TextInput
         style={styles.textInput}
         value={item.description}
-        onChangeText={t => setItem({...item, description: t})}
+        onChangeText={t => setItem({ ...item, description: t })}
         onSubmitEditing={sendItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
@@ -202,7 +202,7 @@ const AddResource = function({navigation}) {
       <TextInput
         style={styles.textInput}
         value={item.contact}
-        onChangeText={t => setItem({...item, contact: t})}
+        onChangeText={t => setItem({ ...item, contact: t })}
         onSubmitEditing={sendItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
@@ -212,7 +212,7 @@ const AddResource = function({navigation}) {
       <TextInput
         style={styles.textInput}
         value={item.district}
-        onChangeText={t => setItem({...item, district: t})}
+        onChangeText={t => setItem({ ...item, district: t })}
         onSubmitEditing={sendItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
@@ -222,7 +222,7 @@ const AddResource = function({navigation}) {
       <TextInput
         style={styles.textInput}
         value={item.state}
-        onChangeText={t => setItem({...item, state: t})}
+        onChangeText={t => setItem({ ...item, state: t })}
         onSubmitEditing={sendItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
@@ -233,7 +233,7 @@ const AddResource = function({navigation}) {
       <TextInput
         style={styles.textInput}
         value={item.country}
-        onChangeText={t => setItem({...item, country: t})}
+        onChangeText={t => setItem({ ...item, country: t })}
         onSubmitEditing={sendItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}
@@ -246,15 +246,15 @@ const AddResource = function({navigation}) {
           {useLocation ? (
             <CheckedIcon height="18" width="18" />
           ) : (
-            <UncheckedIcon height="18" width="18" />
-          )}
+              <UncheckedIcon height="18" width="18" />
+            )}
         </TouchableOpacity>
         <Text style={styles.checkboxLabel}> Use my current location </Text>
       </View>
       <TextInput
         style={useLocation ? styles.textInputDisabled : styles.textInput}
         value={item.district + ',' + item.state + ',' + item.country}
-        onChangeText={t => setItem({...item, location: t})}
+        onChangeText={t => setItem({ ...item, location: t })}
         onSubmitEditing={sendItem}
         returnKeyType="send"
         enablesReturnKeyAutomatically={true}

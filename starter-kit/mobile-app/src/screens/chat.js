@@ -11,7 +11,7 @@ import {
   Linking,
 } from 'react-native';
 
-import {session, message} from '../lib/utils';
+import { session, message } from '../lib/utils';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Chat = function({navigation}) {
+const Chat = function ({ navigation }) {
   const [input, setInput] = React.useState('');
   const [sessionId, setSessionId] = React.useState('');
   const [messages, setMessages] = React.useState([]);
@@ -103,7 +103,7 @@ const Chat = function({navigation}) {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('Map', {item: props});
+          navigation.navigate('Map', { item: props });
         }}>
         <Text style={styles.chatText}>
           {' '}
@@ -116,7 +116,7 @@ const Chat = function({navigation}) {
 
   const HospitalMapLink = props => {
     let locationText = '';
-    const loc = props.district + ',' + props.state + ',' + props.country;
+    const loc = props.district + ' ' + props.state + ' ' + props.country;
     if (loc.length !== 2 || isNaN(loc[0]) || isNaN(loc[1])) {
       locationText = loc;
     } else {
@@ -126,7 +126,7 @@ const Chat = function({navigation}) {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('Map', {item: props});
+          navigation.navigate('Map', { item: props });
         }}>
         <Text style={styles.chatText}>
           {' '}
@@ -201,7 +201,7 @@ const Chat = function({navigation}) {
       sessionid: sessionId,
     };
 
-    addMessages([{text: input}], true);
+    addMessages([{ text: input }], true);
 
     setInput('');
 
