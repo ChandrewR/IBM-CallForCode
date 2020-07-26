@@ -114,6 +114,32 @@ const Chat = function ({ navigation }) {
     );
   };
 
+  const TravelMapLink = props => {
+    let locationText = '';
+    const loc =
+      typeof props.location === 'string'
+        ? props.location.split(',')
+        : props.location;
+    if (loc.length !== 2 || isNaN(loc[0]) || isNaN(loc[1])) {
+      locationText = loc;
+    } else {
+      locationText = 'this location';
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Map', { item: props });
+        }}>
+        <Text style={styles.chatText}>
+          {' '}
+          {props.currentcoronacount} at{' '}
+          <Text style={styles.anchorLink}>{locationText}</Text>{' '}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   const HospitalMapLink = props => {
     let locationText = '';
     const loc = props.district + ' ' + props.state + ' ' + props.country;
@@ -130,7 +156,7 @@ const Chat = function ({ navigation }) {
         }}>
         <Text style={styles.chatText}>
           {' '}
-          {props.name} at <Text style={styles.anchorLink}>{locationText}</Text>{' '}
+          {props.currentcoronacount} at <Text style={styles.anchorLink}>{locationText}</Text>{' '}
         </Text>
       </TouchableOpacity>
     );
@@ -152,13 +178,20 @@ const Chat = function ({ navigation }) {
   };
 
   const Resource = props => {
-    if (props.location) {
-      return <MapLink {...props} />;
-    } else if (props.district || props.state || props.country) {
-      return <HospitalMapLink {...props} />;
+
+    if (props.type === "Travel") {
+      return <TravelMapLink {...props} />;
     } else {
-      return <MailLink {...props} />;
+      if (props.location) {
+        return <MapLink {...props} />;
+      } else if (props.district || props.state || props.country) {
+        return <HospitalMapLink {...props} />;
+      } else {
+        return <MailLink {...props} />;
+      }
     }
+
+
   };
 
   const Message = props => {
