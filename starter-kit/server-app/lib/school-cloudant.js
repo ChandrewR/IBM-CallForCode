@@ -17,7 +17,7 @@ var cloudant = new Cloudant({
 
 // Cloudant DB reference
 let db;
-let db_name = "community_db";
+let db_name = "school_db";
 
 /**
  * Connects to the Cloudant DB, creating it if does not already exist
@@ -60,12 +60,12 @@ const dbCloudantConnect = () => {
 
 // Initialize the DB when this module is loaded
 (function getDbConnection() {
-    console.log('Initializing Community Cloudant connection...', 'getDbConnection()');
+    console.log('Initializing School Cloudant connection...', 'getDbConnection()');
     dbCloudantConnect().then((database) => {
-        console.log('Community Cloudant connection initialized.', 'getDbConnection()');
+        console.log('School Cloudant connection initialized.', 'getDbConnection()');
         db = database;
     }).catch((err) => {
-        console.log('Error while initializing Community Cloudant DB: ' + err.message, 'getDbConnection()');
+        console.log('Error while initializing School Cloudant DB: ' + err.message, 'getDbConnection()');
         throw err;
     });
 })();
@@ -83,16 +83,35 @@ const dbCloudantConnect = () => {
  *          could be located that matches. 
  *  reject(): the err object from the underlying data store
  */
-function find(type, partialName, userID) {
+function find(type, name, rollno, school, district, state, country, userID) {
     return new Promise((resolve, reject) => {
         let selector = {}
         if (type) {
             selector['type'] = type;
         }
-        if (partialName) {
-            let search = `(?i).*${partialName}.*`;
+        if (district) {
+            let search = `(?i).*${district}.*`;
+            selector['district'] = { '$regex': search };
+        }
+        if (name) {
+            let search = `(?i).*${name}.*`;
             selector['name'] = { '$regex': search };
-
+        }
+        if (rollno) {
+            let search = `(?i).*${rollno}.*`;
+            selector['rollno'] = { '$regex': search };
+        }
+        if (school) {
+            let search = `(?i).*${school}.*`;
+            selector['school'] = { '$regex': search };
+        }
+        if (state) {
+            let search = `(?i).*${state}.*`;
+            selector['state'] = { '$regex': search };
+        }
+        if (country) {
+            let search = `(?i).*${country}.*`;
+            selector['country'] = { '$regex': search };
         }
         if (userID) {
             selector['userID'] = userID;
@@ -151,7 +170,7 @@ function deleteById(id, rev) {
  * @return {Promise} - promise that will be resolved (or rejected)
  * when the call to the DB completes
  */
-function create(type, name, description, quantity, location, contact, userID) {
+function create(type, name, rollno, school, district, state, country, location, contact, userID, scholarshipamount) {
     return new Promise((resolve, reject) => {
         let itemId = uuidv4();
         let whenCreated = Date.now();
@@ -160,8 +179,12 @@ function create(type, name, description, quantity, location, contact, userID) {
             id: itemId,
             type: type,
             name: name,
-            description: description,
-            quantity: quantity,
+            rollno: rollno,
+            school: school,
+            district: district,
+            state: state,
+            country: country,
+            scholarshipamount: scholarshipamount,
             location: location,
             contact: contact,
             userID: userID,
@@ -196,7 +219,7 @@ function create(type, name, description, quantity, location, contact, userID) {
  * @return {Promise} - promise that will be resolved (or rejected)
  * when the call to the DB completes
  */
-function update(id, type, name, description, quantity, location, contact, userID) {
+function update(id, type, name, rollno, school, district, state, country, location, contact, userID, scholarshipamount) {
     return new Promise((resolve, reject) => {
         db.get(id, (err, document) => {
             if (err) {
@@ -208,8 +231,12 @@ function update(id, type, name, description, quantity, location, contact, userID
                 }
                 if (type) { item["type"] = type } else { item["type"] = document.type };
                 if (name) { item["name"] = name } else { item["name"] = document.name };
-                if (description) { item["description"] = description } else { item["description"] = document.description };
-                if (quantity) { item["quantity"] = quantity } else { item["quantity"] = document.quantity };
+                if (rollno) { item["rollno"] = rollno } else { item["rollno"] = document.rollno };
+                if (school) { item["school"] = school } else { item["school"] = document.school };
+                if (district) { item["district"] = district } else { item["district"] = document.district };
+                if (state) { item["state"] = state } else { item["state"] = document.state };
+                if (country) { item["country"] = country } else { item["country"] = document.country };
+                if (scholarshipamount) { item["scholarshipamount"] = scholarshipamount } else { item["scholarshipamount"] = document.scholarshipamount };
                 if (location) { item["location"] = location } else { item["location"] = document.location };
                 if (contact) { item["contact"] = contact } else { item["contact"] = document.contact };
                 if (userID) { item["userID"] = userID } else { item["userID"] = document.userID };

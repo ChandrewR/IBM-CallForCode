@@ -60,12 +60,12 @@ const dbCloudantConnect = () => {
 
 // Initialize the DB when this module is loaded
 (function getDbConnection() {
-    console.log('Initializing Cloudant connection...', 'getDbConnection()');
+    console.log('Initializing Travel Cloudant connection...', 'getDbConnection()');
     dbCloudantConnect().then((database) => {
-        console.log('Cloudant connection initialized.', 'getDbConnection()');
+        console.log('Travel Cloudant connection initialized.', 'getDbConnection()');
         db = database;
     }).catch((err) => {
-        console.log('Error while initializing DB: ' + err.message, 'getDbConnection()');
+        console.log('Error while initializing Travel Cloudant DB: ' + err.message, 'getDbConnection()');
         throw err;
     });
 })();

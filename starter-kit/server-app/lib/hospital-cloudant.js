@@ -78,15 +78,15 @@ const dbCloudantConnect = () => {
 
 // Initialize the DB when this module is loaded
 (function getDbConnection() {
-  console.log("Initializing Cloudant connection...", "getDbConnection()");
+  console.log("Initializing Hospital Cloudant connection...", "getDbConnection()");
   dbCloudantConnect()
     .then(database => {
-      console.log("Cloudant connection initialized.", "getDbConnection()");
+      console.log("Hospital Cloudant connection initialized.", "getDbConnection()");
       db = database;
     })
     .catch(err => {
       console.log(
-        "Error while initializing DB: " + err.message,
+        "Error while initializing Hospital Cloudant DB: " + err.message,
         "getDbConnection()"
       );
       throw err;

@@ -21,6 +21,9 @@ import MyHospitals from './src/screens/hospital-my';
 import AddTravel from './src/screens/travel-add';
 import EditTravel from './src/screens/travel-edit';
 import MyTravel from './src/screens/travel-my';
+import AddSchool from './src/screens/school-add';
+import EditSchool from './src/screens/school-edit';
+import MySchool from './src/screens/school-my';
 import Map from './src/screens/map';
 
 import {
@@ -75,6 +78,17 @@ const TravelStackOptions = ({ navigation }) => {
   };
 };
 
+const SchoolStackOptions = ({ navigation }) => {
+  return {
+    headerRight: () => (
+      <Button
+        onPress={() => navigation.navigate('Add School')}
+        title="Add "
+      />
+    ),
+  };
+};
+
 const tabBarOptions = {
   // showLabel: false,
   activeTintColor: '#1062FE',
@@ -97,13 +111,13 @@ const TabLayout = () => (
         tabBarIcon: ({ color }) => <HomeIcon fill={color} />,
       }}
     />
-    <Tab.Screen
+    {/* <Tab.Screen
       name="Donate"
       component={DonateStackLayout}
       options={{
         tabBarIcon: ({ color }) => <DonateIcon fill={color} />,
       }}
-    />
+    /> */}
     <Tab.Screen
       name="Hospitals"
       component={HospitalStackLayout}
@@ -114,6 +128,13 @@ const TabLayout = () => (
     <Tab.Screen
       name="Corona count"
       component={TravelStackLayout}
+      options={{
+        tabBarIcon: ({ color }) => <CoronaIcon fill={color} />,
+      }}
+    />
+    <Tab.Screen
+      name="Scholarship"
+      component={SchoolStackLayout}
       options={{
         tabBarIcon: ({ color }) => <CoronaIcon fill={color} />,
       }}
@@ -161,6 +182,18 @@ const TravelStackLayout = () => (
     />
     <Stack.Screen name="Add Travel" component={AddTravel} />
     <Stack.Screen name="Edit Travel" component={EditTravel} />
+  </Stack.Navigator>
+);
+
+const SchoolStackLayout = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Scholarship"
+      component={MySchool}
+      options={SchoolStackOptions}
+    />
+    <Stack.Screen name="Add School" component={AddSchool} />
+    <Stack.Screen name="Edit School" component={EditSchool} />
   </Stack.Navigator>
 );
 
