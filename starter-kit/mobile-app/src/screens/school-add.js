@@ -142,7 +142,7 @@ const AddResource = function ({ navigation }) {
           />
         </View>
         <View style={styles.quantityArea}>
-          <Text style={styles.label}>Roll no</Text>
+          <Text style={styles.label}>Aadhar no</Text>
           <TextInput
             style={styles.textInput}
             value={item.rollno}

@@ -31,7 +31,8 @@ import {
   DonateIcon,
   SearchIcon,
   HospitalIcon,
-  CoronaIcon
+  CoronaIcon,
+  ScholarshipIcon
 } from './src/images/svg-icons';
 
 const Stack = createStackNavigator();
@@ -82,7 +83,7 @@ const SchoolStackOptions = ({ navigation }) => {
   return {
     headerRight: () => (
       <Button
-        onPress={() => navigation.navigate('Add School')}
+        onPress={() => navigation.navigate('Student Detail')}
         title="Add "
       />
     ),
@@ -136,7 +137,7 @@ const TabLayout = () => (
       name="Scholarship"
       component={SchoolStackLayout}
       options={{
-        tabBarIcon: ({ color }) => <CoronaIcon fill={color} />,
+        tabBarIcon: ({ color }) => <ScholarshipIcon fill={color} />,
       }}
     />
     <Tab.Screen
@@ -192,8 +193,8 @@ const SchoolStackLayout = () => (
       component={MySchool}
       options={SchoolStackOptions}
     />
-    <Stack.Screen name="Add School" component={AddSchool} />
-    <Stack.Screen name="Edit School" component={EditSchool} />
+    <Stack.Screen name="Student Detail" component={AddSchool} />
+    <Stack.Screen name="Pay Scholarship" component={EditSchool} />
   </Stack.Navigator>
 );
 

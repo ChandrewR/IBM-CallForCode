@@ -59,24 +59,24 @@ const MyResources = function ({ navigation }) {
     navigation.addListener('focus', () => {
       search({ userID: userID() })
         .then(setItems)
-        .catch(err => {
-          console.log(err);
-          Alert.alert('ERROR', 'Please try again. If the problem persists contact an administrator.', [{ text: 'OK' }]);
-        });
+      /* .catch(err => {
+        console.log(err);
+        Alert.alert('ERROR', 'Please try again. If the problem persists contact an administrator.', [{ text: 'OK' }]);
+      }); */
     })
   }, []);
 
   const Item = (props) => {
     return (
       <TouchableOpacity style={styles.itemTouchable}
-        onPress={() => { navigation.navigate('Edit School', { item: props }); }}>
+        onPress={() => { navigation.navigate('Pay Scholarship', { item: props }); }}>
         <View style={props.scholarshipamount === 0 ? styles.scholarshipNotPaidBgColor : styles.scholarshipPaidBgColor}>
           <View style={styles.itemView}>
             <Text style={styles.itemName}>{props.name}</Text>
 
             <Text style={styles.itemQuantity}> ( {props.scholarshipamount} ) </Text>
           </View>
-          <Text style={styles.itemDescription}>Roll no: {props.rollno}</Text>
+          <Text style={styles.itemDescription}>Aadhar no: {props.rollno}</Text>
           <Text style={styles.itemDescription}>{props.school + ',' + props.district + ',' + props.state + ',' + props.country}</Text>
           <Text style={styles.itemDescription}>{props.contact}</Text>
         </View>
