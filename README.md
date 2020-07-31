@@ -1,18 +1,13 @@
-# Community collaboration in the context of COVID-19
+# COVID-19 - Hospital search, Travel risk and Students scholarship - Idea and solution
 
 This solution starter was created by technologists from IBM.
 
 ## Authors
 
-- Henry Nash
-- Va Barbosa
-- Javier Torres
-- Omer Arad
-- JJ Asghar
-- Jody Burks
-- Robert Loredo
-- Debbie Kestin Schildkraut
-- Bruce Weed
+- Chandru
+- Vinoth
+- Moorthi
+- Arul
 
 ## Contents
 
@@ -46,14 +41,17 @@ Creating a chatbot using Watson Assistant can help you address the issues that y
 
 ## The idea
 
-The goal is to provide a mobile application, along with server-side components, that serves as the basis for developers to build out a community cooperation application that addresses local needs for food, equipment, and resources.
-It would allow both "Suppliers" (such as a store or a community member who has produce they can sell or distribute) to make people aware of what the have; and consumers ("Recipients") to locate where these supplies are, and, if necessary, guide them to the appropriate locations to pick them up.
+If a person needs to know details about hospitals which provides the treatment, the chatbot provides the list of hospitals that treat COVID-19, about drug availability in listed hospitals, no. of patients undergoing treatment, vacancies available in Hospitals.
+
+If a person needs to travel between cities, the chatbot analyzes the risk of travel and suggests users to travel or not. For example - If a person wants to travel from Chennai to Coimbatore by road, the chatbot lists out the cities to be crossed and its status of COVID-19 like RED or GREEN based on no. of people affected in those cities and if its critical, warns people not to travel or postpone.
+
+E-Governance portal which enables students to get scholarship online during this COVID -19 situation.
 
 ## How it works
 
-A Supplier (who may be a regular resident, a small business, a voluntary organization, etc.) that has food, supplies, resources, or other essentials they can provide opens the mobile application and fills out a brief form that indicates what they have. This information is then stored in a database in the IBM Cloud.
+A person in need of treatment, searching for hospitals. If people need to travel to other cities. Ask Chatbot - IBM Watson assistant and chatbot replies with answers.
 
-A Recipient, who is in need of food, supplies, resources, or other essentials, opens the mobile application and can use the chat interface to locate supplies near them. For instance, they might type "Where can I find bread?" or "Can someone collect my shopping for me?" The mobile application then accesses the database (after first understanding the question via Watson Assistant) and then displays a map showing locally where they can find what they are looking for.
+An app provides the functionality to teacher/government to add eligible students and pay thier scholarship online.
 
 ## Diagrams
 
@@ -61,10 +59,10 @@ A Recipient, who is in need of food, supplies, resources, or other essentials, o
 
 This solution starter idea combines a chat interface (Watson Assistant), data storage to hold the status of supplies available, and location services with real-time information to get users the information they need.
 
-1. The Recipient launches the mobile app and can access information across multiple services.
-1. The Recipient can ask questions to Watson Assistant and get answers on food/service availability questions.
-1. The Supplier can post the availability of stock or services they can provide, as well as locate the items they need.
-1. The Recipient can obtain geolocation data to plot routes to collect (or drop off) supplies using HERE Location Services.
+1. People launches the mobile app and can access information across multiple services.
+1. People can ask questions to Watson Assistant and get answers on hospital search questions.
+1. People can ask questions to Watson Assistant and get answers travel risk questions.
+1. Teachers can pay the scholarship to eligible students through online.
 
 ## Documents
 
@@ -205,12 +203,10 @@ To run the mobile application (using the Xcode iOS Simulator or Android Studio E
 
 With the application running in the simulator/emulator, you should be able to navigate through the various screens:
 
-![Intro Screen](/images/0-screen-home.png)
-![Donate Screen](/images/1-screen-donate.png)
-![Search Screen](/images/2-screen-search.png)
-![Chat Screen](/images/5-screen-chat.png)
-![Map1 Screen](/images/3-screen-map.png)
-![Map2 Screen](/images/4-screen-map.png)
+![Hospital search](/images/HospitalSearch.PNG)
+![Travel risk](/images/TravelSearch.PNG)
+![Student list](/images/Studentlist.PNG)
+![Pay scholarship](/images/PayScholarship.PNG)
 
 ## Resources
 
@@ -221,7 +217,3 @@ With the application running in the simulator/emulator, you should be able to na
 - [Node.js](https://nodejs.org)
 - [React Native](https://reactnative.dev/)
 - [IBM Blockchain for Developers](https://developer.ibm.com/technologies/blockchain/)
-
-## License
-
-This solution starter is made available under the [Apache 2 License](LICENSE).
