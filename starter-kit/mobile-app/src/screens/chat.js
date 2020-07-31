@@ -156,7 +156,7 @@ const Chat = function ({ navigation }) {
         }}>
         <Text style={styles.chatText}>
           {' '}
-          {props.currentcoronacount} at <Text style={styles.anchorLink}>{locationText}</Text>{' '}
+          {props.availability} beds available at {props.name} -  <Text style={styles.anchorLink}>{locationText}</Text>{' '}
         </Text>
       </TouchableOpacity>
     );
@@ -181,7 +181,11 @@ const Chat = function ({ navigation }) {
 
     if (props.type === "Travel") {
       return <TravelMapLink {...props} />;
-    } else {
+    }
+    else if (props.type === "Hospital") {
+      return <HospitalMapLink {...props} />;
+    }
+    else {
       if (props.location) {
         return <MapLink {...props} />;
       } else if (props.district || props.state || props.country) {

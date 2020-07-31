@@ -19,14 +19,15 @@ const styles = StyleSheet.create({
   image: {
     alignSelf: 'flex-start',
     height: '20%',
-    width:'50%',
-    resizeMode: 'contain'
+    width: '50%',
+    resizeMode: 'contain',
+    marginBottom: 10
   },
   title: {
     fontFamily: 'IBMPlexSans-Medium',
-    fontSize: 36,
+    fontSize: 24,
     color: '#323232',
-    paddingBottom: 15
+    paddingBottom: 8
   },
   subtitle: {
     fontFamily: 'IBMPlexSans-Light',
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
   content: {
     fontFamily: 'IBMPlexSans-Light',
     color: '#323232',
-    marginTop: 10,
+    marginTop: 5,
     marginBottom: 10,
     fontSize: 16
   },
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     overflow: 'hidden',
     padding: 12,
-    textAlign:'center',
+    textAlign: 'center',
     marginTop: 15
   }
 });
@@ -68,31 +69,26 @@ const Home = () => (
         style={styles.image}
         source={require('../images/2020-cfc-512.png')}
       />
-      <Text style={styles.subtitle}>Starter Kit</Text>
-      <Text style={styles.title}>Community Collaboration</Text>
+      {/* <Text style={styles.subtitle}>Starter Kit</Text> */}
+      <Text style={styles.title}>Hospital search</Text>
       <Text style={styles.content}>
-        There is a growing interest in enabling communities to cooperate among
-        themselves to solve problems in times of crisis, whether it be to
-        advertise where supplies are held, offer assistance for collections, or
-        other local services like volunteer deliveries.
+        Person can search a hospital that treats corona nearby.
       </Text>
+      <Text style={styles.title}>Travel risk</Text>
       <Text style={styles.content}>
-        What is needed is a solution that empowers communities to easily connect
-        and provide this information to each other.
+        Person can search for a city that he needs to travel and get the risk involved in travel.
       </Text>
+      <Text style={styles.title}>Student scholarship</Text>
       <Text style={styles.content}>
-        This solution starter kit provides a mobile application, along with
-        server-side components, that serves as the basis for developers to build
-        out a community cooperation application that addresses local needs for
-        food, equipment, and resources.
+        E-Governance portal which enables teachers/government to pay scholarship through online app to eligible students.
       </Text>
       <View style={styles.buttonGroup}>
         <TouchableOpacity onPress={() => Linking.openURL('https://developer.ibm.com/callforcode')}>
           <Text style={styles.button}>Learn more</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => Linking.openURL('https://github.com/Call-for-Code/Solution-Starter-Kit-Cooperation-2020')}>
+        {/* <TouchableOpacity onPress={() => Linking.openURL('https://github.com/Call-for-Code/Solution-Starter-Kit-Cooperation-2020')}>
           <Text style={styles.button}>Get the code</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </ScrollView>
   </View>
