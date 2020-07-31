@@ -1,6 +1,6 @@
 # COVID-19 - Hospital search, Travel risk and Students scholarship - Idea and solution
 
-This solution starter was created by technologists from IBM.
+This solution starter was created by technologists from IBM and modified by below authors for Call for Code 2020.
 
 ## Authors
 
